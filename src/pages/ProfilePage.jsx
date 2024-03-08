@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { supabase } from "../createClient";
 import { Link } from "react-router-dom";
+import image from "../../public/images/profile.png"
+
 
 const User = () => {
   const { user, logout, role } = useAuth();
@@ -49,7 +51,7 @@ const User = () => {
                 alt="profilebg"
               />
               <img
-                src="./images/profile.png"
+                src={image}
                 className="rounded-[100px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-[3px] border-black"
                 width={140}
                 height={140}
