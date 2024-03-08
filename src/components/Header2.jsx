@@ -113,9 +113,11 @@ const Header2 = () => {
                   className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box lg:w-52"
                 >
                   <li>
+                  <Link to={`/profile`}>
                     <a className="justify-between">
                       Profile
                     </a>
+                    </Link>
                   </li>
                   <li>
                     <a>Settings</a>
