@@ -103,7 +103,7 @@ const Header2 = () => {
                   <div className="w-8 lg:w-10 rounded-full">
                     <img
                       alt="Profile"
-                      src="/images/profile.png"
+                      src="../images/profile.png"
                       className="w-full h-full rounded-full"
                     />
                   </div>
