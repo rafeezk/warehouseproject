@@ -22,6 +22,7 @@ const ListData = () => {
     product_type: "",
     product_price: "",
     product_total: "",
+    product_image: "",
   });
 
   useEffect(() => {
@@ -31,6 +32,7 @@ const ListData = () => {
   async function fetchData() {
     const { data } = await supabase.from("warehouses").select("*");
     setWarehouses(data);
+    console.log(data[0].images);
     // console.log(data);
   }
 
@@ -69,30 +71,79 @@ const ListData = () => {
     }
   };
 
-  async function deleteData(warehouseId) {
-    await supabase.from("warehouses").delete().eq("id", warehouseId);
+  const deleteData = async (id) => {
+    const { data: getImageProduct } = await supabase
+      .from("warehouses")
+      .select("images")
+      .eq("id", id);
+
+    const { data: getImage } = await supabase.storage
+      .from("warehouse_images")
+      .remove([`images/${getImageProduct[0].images}`]);
+
+    const { error } = await supabase.from("warehouses").delete().eq("id", id);
+    if (!error && getImage) {
+      alert("delete data successfull");
+      window.location.reload();
+    }
     fetchData();
-  }
+  };
 
   async function updateData(userId) {
     // e.preventDefault()
-    const { error } = await supabase
-      .from("warehouses")
-      .update({
-        product_name: warehouse2.product_name,
-        product_desc: warehouse2.product_desc,
-        product_type: warehouse2.product_type,
-        product_price: warehouse2.product_price,
-        product_total: warehouse2.product_total,
-      })
-      .eq("id", userId);
+    const filename = `${uuidv4(imageUpload.name)}`;
 
-    fetchData();
+    if (imageUpload.length === 0) {
+      const { error } = await supabase
+        .from("warehouses")
+        .update({
+          product_name: warehouse2.product_name,
+          product_desc: warehouse2.product_desc,
+          product_type: warehouse2.product_type,
+          product_price: warehouse2.product_price,
+          product_total: warehouse2.product_total,
+          images: warehouse2.product_image,
+        })
+        .eq("id", userId);
 
-    if (error) {
-      console.error("Error update data:", error);
+      fetchData();
+
+      if (!error) {
+        alert("update succesfull!");
+        window.location.reload();
+      }
     } else {
-      window.location.reload();
+      const { data: deleteImage } = await supabase.storage
+        .from("warehouse_images")
+        .remove([`images/${warehouse2.images}`]);
+
+      if (deleteImage) {
+        const { data: updateData } = await supabase.storage
+          .from("warehouse_images")
+          .upload(`images/${filename}`, imageUpload, {
+            cacheControl: "3600",
+            upsert: true,
+          });
+
+        if (updateData) {
+          const { error } = await supabase
+            .from("warehouses")
+            .update({
+              product_name: warehouse2.product_name,
+              product_desc: warehouse2.product_desc,
+              product_type: warehouse2.product_type,
+              product_price: warehouse2.product_price,
+              product_total: warehouse2.product_total,
+              images: filename,
+            })
+            .eq("id", userId);
+
+          if (!error) {
+            alert("update succesfull!");
+            window.location.reload();
+          }
+        }
+      }
     }
   }
 
@@ -129,10 +180,31 @@ const ListData = () => {
     });
   }
 
+  const getImage = (filename) => {
+    const publicUrl = supabase.storage
+      .from("warehouse_images")
+      .getPublicUrl("images/" + filename).data.publicUrl;
+    return publicUrl;
+  };
+
   const handleImage = (e) => {
     setImageUpload(e.target.files[0]);
-    // console.log(e.target.files[0]);
+    console.log(e.target.files[0]);
   };
+
+  const toRupiah = (price, options = {}) => {
+    const dot = options.dot || '.';
+    const formatter = new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      minimumFractionDigits: 0,
+    });
+    return formatter.format(price).replace(',', dot);
+  };
+
+  function truncate(str) {
+    return str.length > 20 ? str.substring(0, 20) + "..." : str;
+  }
 
   return (
     <section className="">
@@ -276,7 +348,7 @@ const ListData = () => {
                 name="product_image"
                 type="file"
                 placeholder="type here..."
-                onChange={handleChange2}
+                onChange={handleImage}
                 defaultValue={warehouse2.product_image}
               />
 
@@ -289,7 +361,7 @@ const ListData = () => {
         </div>
       </dialog>
 
-      <h2 className="py-5 text-2xl text-center font-medium">Product Data</h2>
+      <h2 className="py-8 font-bold text-3xl text-center text-black italic underline">product data</h2>
       <div className="overflow-x-auto px-5">
         <div className="py-3">
           <button
@@ -317,22 +389,19 @@ const ListData = () => {
             {warehouses.map((i, index) => (
               <tr key={index}>
                 <th>{index + 1}</th>
-                <td>{i.product_image}</td>
+                <td>
+                  <img
+                    src={getImage(i.images)}
+                    className="w-14 h-10 object-cover"
+                  />
+                </td>
                 <td>{i.product_name}</td>
-                <td>{i.product_desc}</td>
+                <td>{truncate(i.product_desc)}</td>
                 <td>{i.product_type}</td>
-                <td>{i.product_price}</td>
+                <td>{toRupiah(i.product_price)}</td>
                 <td>{i.product_total}</td>
                 <td>
-                  <button
-                    className="btn btn-error text-white"
-                    onClick={() => {
-                      deleteData(i.id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                  <button
+                <button
                     className="btn btn-primary text-white mx-1"
                     onClick={() => {
                       displayWarehouse(i.id);
@@ -340,6 +409,14 @@ const ListData = () => {
                     }}
                   >
                     Edit
+                  </button>
+                  <button
+                    className="btn btn-error text-white lg:mt-0 mt-2"
+                    onClick={() => {
+                      deleteData(i.id);
+                    }}
+                  >
+                    Delete
                   </button>
                 </td>
               </tr>

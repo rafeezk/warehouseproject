@@ -27,8 +27,9 @@ const CardPage = () => {
 
   return (
     <>
-      <section className="bg-[#282726]">
-        <h2 className="py-8 font-bold text-3xl text-center text-white italic underline">
+      {/* bg-282726 */}
+      <section className="bg-[#F3F4F6]">
+        <h2 className="py-8 font-bold text-3xl text-center text-black italic underline">
           featured products
         </h2>
         {/* <h2 className="font-semibold text-xs text-white text-center pb-8 uppercase mt-1">products</h2> */}
@@ -41,14 +42,14 @@ const CardPage = () => {
         <div className="flex justify-center items-center py-5">
           {showMore ? (
             <button
-              className="bg-black text-white h-10 mt-5 hover:bg-white hover:text-black duration-500 rounded-full w-40"
+              className="border border-black text-black h-10 mt-5 hover:bg-black hover:text-white duration-500 rounded-full w-40"
               onClick={() => setShowMore(false)}
             >
               Show Less
             </button>
           ) : (
             <button
-              className="bg-black  text-white  h-10 mt-5 hover:bg-white hover:text-black duration-500 rounded-full w-40"
+              className="border border-black text-black h-10 mt-5 hover:bg-black hover:text-white duration-500 rounded-full w-40"
               onClick={() => setShowMore(!showMore)}
             >
               Show More

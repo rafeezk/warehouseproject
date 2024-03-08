@@ -15,6 +15,8 @@ import { library } from "@fortawesome/fontawesome-svg-core";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
+import CartPage from "./pages/CartPage";
+import HistoryPage from "./pages/HistoryPage";
 
 function App() {
   return (
@@ -27,6 +29,8 @@ function App() {
 
         <Route element={<AuthRoute />}>
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/cart" element={<CartPage/>} />
+          <Route path="/history" element={<HistoryPage/>} />
         </Route>
 
         <Route element={<AuthAdmin />}>

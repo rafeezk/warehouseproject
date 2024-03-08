@@ -13,24 +13,16 @@ const HomePage = () => {
     <>
       <Header />
       <div
-        className="flex flex-col h-screen items-center justify-center"
+        className="flex flex-col h-screen items-center justify-center px-4 sm:px-0" // Added padding for mobile view
         id="home"
       >
-        <p className="text-9xl text-center font-bold text-white uppercase">
+        <p className="text-5xl sm:text-9xl text-center font-bold text-white uppercase">
+          {" "}
+          {/* Adjusted font size for small screens and above */}
           make <br />
           new <br />
           revolution
         </p>
-        {/* start with rafehouse */}
-        {/* <h2 className="text-center font-bold text-5xl text-white">
-          Solution Your Problem
-        </h2>
-        <p className="font-medium my-4 text-lg text-white">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi
-          laboriosam omnis debitis dolores, delectus error dicta. Esse velit
-          aliquid ipsum.
-        </p>
-        <button className="">explore now</button> */}
       </div>
       <CardPage />
       <Footer />

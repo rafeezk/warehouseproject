@@ -12,7 +12,7 @@
 header.sticky {
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   transition: 0.4s;
-  @apply fixed w-full bg-white/20 backdrop-blur z-50 py-5;
+  @apply fixed w-full bg-white/20 backdrop-blur z-50 py-3;
 }
 
 #home {

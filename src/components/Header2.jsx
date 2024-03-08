@@ -1,50 +1,19 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAuth } from "../auth/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { supabase } from "../createClient";
 
-const Header = () => {
+const Header2 = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [getTotalCart, setGetTotalCart] = useState("");
-  const [profileName, setProfileName] = useState("");
-  const [greetingMessage, setGreetingMessage] = useState("");
-
+  
   const totalCart = async () => {
     const { data } = await supabase.from("cart").select("*");
-
     setGetTotalCart(data.length);
   };
-
-  const greetingTime = () => {
-    const currentTime = new Date().getHours();
-    if (currentTime >= 4 && currentTime < 10) {
-      setGreetingMessage("Selamat Pagi");
-    } else if (currentTime >= 10 && currentTime < 15) {
-      setGreetingMessage("Selamat Siang");
-    } else if (currentTime >= 15 && currentTime < 18) {
-      setGreetingMessage("Selamat Bersenja");
-    } else {
-      setGreetingMessage("Selamat Malam");
-    }
-  };
-
-  const fetchProfileName = async () => {
-    try {
-      const { data, error } = await supabase
-        .from("profiles")
-        .select("username")
-        .eq("id", user.id)
-        .single();
-      if (error) {
-        throw error;
-      }
-      setProfileName(data.username);
-    } catch (error) {
-      console.error("Error fetching profile name:", error.message);
-    }
-  };
-
+  
   const handleLogout = async (e) => {
     e.preventDefault();
     try {
@@ -66,12 +35,8 @@ const Header = () => {
   };
 
   useEffect(() => {
-    if (user) {
-      fetchProfileName();
-    }
     scroll();
     totalCart();
-    greetingTime();
 
     supabase
       .channel("cart")
@@ -90,16 +55,16 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="navbar px-4 sm:px-10 py-4 absolute" id="header">
-      <div className="flex-1">
-        <a className="btn btn-ghost text-xl text-white">rarehouse</a>
-      </div>
-      <div className="flex-none">
+    <header className="header absolute w-full px-4 lg:px-10 py-2 z-10 bg-white border border-[#c3c3c3]">
+      <div className="flex items-center justify-between">
+        <h2 className="hidden sm:block text-xs lg:text-base">hola {user.email}</h2>
+        <div className="flex-grow text-left lg:text-center">
+          <h2 className="text-lg lg:text-xl text-black cursor-pointer font-bold">
+            rarehouse
+          </h2>
+        </div>
         {user ? (
-          <>
-            <h2 className="hidden me-2 text-[#f4f4f4] tracking-wider sm:block">
-              {greetingMessage}, {profileName}!
-            </h2>
+          <div className="flex">
             <Link to={`/cart`}>
               <div
                 tabIndex={0}
@@ -109,7 +74,7 @@ const Header = () => {
                 <div className="indicator">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
+                    className="h-4 w-4 sm:h-5 sm:w-5"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -129,27 +94,28 @@ const Header = () => {
             </Link>
 
             <div className="dropdown dropdown-end">
-              <div className="dropdown dropdown-end mx-3">
+              <div className="dropdown dropdown-end lg:mx-3 ">
                 <div
                   tabIndex={0}
                   role="button"
                   className="btn btn-ghost btn-circle avatar"
                 >
-                  <div className="w-10 rounded-full">
+                  <div className="w-8 lg:w-10 rounded-full">
                     <img
-                      alt="Tailwind CSS Navbar component"
+                      alt="Profile"
                       src="/images/profile.png"
+                      className="w-full h-full rounded-full"
                     />
                   </div>
                 </div>
                 <ul
                   tabIndex={0}
-                  className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+                  className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box lg:w-52"
                 >
                   <li>
-                    <Link to={`/profile`}>
-                      <a className="justify-between">Profile</a>
-                    </Link>
+                    <a className="justify-between">
+                      Profile
+                    </a>
                   </li>
                   <li>
                     <a>Settings</a>
@@ -160,23 +126,17 @@ const Header = () => {
                 </ul>
               </div>
             </div>
-          </>
+          </div>
         ) : (
-          <>
-            {/* <button className="bg-[#DEDFDA] text-black text-base px-5 py-1 rounded transition duration-300 hover:bg-black hover:text-white">
-              register
-            </button> */}
-
-            <Link to={"/login"}>
-              <button className="bg-white mx-1 text-black text-base px-7 py-1 rounded-3xl border-2 border-black transition duration-300 hover:bg-black hover:text-white">
-                login
-              </button>
-            </Link>
-          </>
+          <Link to={"/login"}>
+            <button className="bg-white mx-1 text-black text-xs lg:text-base px-3 lg:px-7 py-1 lg:py-1.5 rounded-3xl border-2 border-black transition duration-300 hover:bg-black hover:text-white">
+              Login
+            </button>
+          </Link>
         )}
       </div>
     </header>
   );
 };
 
-export default Header;
+export default Header2;
