@@ -44,12 +44,12 @@ const User = () => {
           <section className="h-screen bg-[#F3F4F6] relative">
             <div className="p-10">
               <img
-                src="../images/profilebg.jpg"
+                src="public/images/profilebg.jpg"
                 className="w-full h-[300px] rounded-3xl object-center shadow-2xl blur-[1px]"
                 alt="profilebg"
               />
               <img
-                src="../images/profile.png"
+                src="public/images/profile.png"
                 className="rounded-[100px] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 border-[3px] border-black"
                 width={140}
                 height={140}
