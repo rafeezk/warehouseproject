@@ -55,9 +55,9 @@ const Header2 = () => {
   }, []);
 
   return (
-    <header className="header absolute w-full px-4 lg:px-10 py-2 z-10 bg-white border border-[#c3c3c3]">
+    <header className="header absolute w-full px-4 lg:px-10 py-3 z-10 bg-white border border-[#c3c3c3]">
       <div className="flex items-center justify-between">
-        <h2 className="hidden sm:block text-xs lg:text-base">hola {user.email}</h2>
+        <h2 className="hidden sm:block text-xs lg:text-base">hola {user ? user.email : 'anonymous'}</h2>
         <div className="flex-grow text-left lg:text-center">
           <h2 className="text-lg lg:text-xl text-black cursor-pointer font-bold">
             rarehouse
@@ -131,8 +131,8 @@ const Header2 = () => {
           </div>
         ) : (
           <Link to={"/login"}>
-            <button className="bg-white mx-1 text-black text-xs lg:text-base px-3 lg:px-7 py-1 lg:py-1.5 rounded-3xl border-2 border-black transition duration-300 hover:bg-black hover:text-white">
-              Login
+            <button className="bg-white mx-1 text-black text-sm px-7 py-1 rounded-3xl border-2 border-black transition duration-300 hover:bg-black hover:text-white">
+              login
             </button>
           </Link>
         )}

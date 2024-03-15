@@ -90,7 +90,7 @@ const Header = () => {
   }, []);
 
   return (
-    <header className="navbar px-4 sm:px-10 py-4 absolute" id="header">
+    <header className="navbar px-4 lg:px-10 py-4 absolute" id="header">
       <div className="flex-1">
         <a className="btn btn-ghost text-xl text-white">rarehouse</a>
       </div>

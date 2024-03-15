@@ -28,7 +28,7 @@ const Login = () => {
       }
 
       if (user && session) {
-        window.location.href = "/";
+        window.location.href = "/warehouseproject/";
       }
     } catch (error) {
       console.log(error);
